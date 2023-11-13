@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import desginIcon from '../Assets/designer.svg';
 import HomeProjects from '../Components/HomeProjects';
@@ -6,6 +6,13 @@ import { Link } from 'react-router-dom';
 
 function PFHome() {
   const [isLoggedIn,setLoggedIn] = useState(false)
+  useEffect(()=>{
+    if(localStorage.getItem("existingUser")){
+      setLoggedIn(true)
+    }else{
+      setLoggedIn(false)
+    }
+  },[])
   return (
     <>
     {/* landing section */}
