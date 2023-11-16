@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { loginAPI, registerAPI } from '../services/allApis'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import { ToastContainer, toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 
 function Auth({register}) {
     const registerForm = register ? true:false
@@ -16,20 +16,20 @@ function Auth({register}) {
         e.preventDefault()
         const {username,email,password} = userData
         if(!username || !email || !password){
-            toast.info("Please fill the form completely")
+            alert("Please fill the form completely")
         }else{
             //api call
             const res = await registerAPI(userData)
-            console.log(res);
+            // console.log(res);
             if(res.status===200){
-                toast.success(`${res.data.username} has successfully registered...`);
+                alert(`${res.data.username} has successfully registered...`);
                 //reset state
                 setUserData({
                     username:"",email:"",password:""
                 })
                 navigate('/login')
             }else{
-                toast.warning(res.response.data)
+                alert(res.response.data)
             }
         }
     }
@@ -38,7 +38,7 @@ function Auth({register}) {
         e.preventDefault()
         const {email,password} = userData
         if( !email || !password){
-            toast.info("Please fill the form completely")
+            alert("Please fill the form completely")
         }else{
             //api call
             const res = await loginAPI({email,password})
@@ -54,12 +54,14 @@ function Auth({register}) {
                 })
                 navigate('/')
             }else{
-                toast.d(res.response.data)
+                alert(res.response.data)
             }
         }
     }
   return (
     <div style={{width:'100%',height:'100vh'}} className='d-flex jusitify-content-center align-items-center'>
+                {/* <ToastContainer position="top-right" autoClose={2000} theme='colored'/> */}
+
         <div className="container w-75">
             <Link to={'/'} style={{textDecoration:'none'}} className='d-flex  align-items-center '><i class="fa-solid fa-arrow-left me-2"></i> <h5>  Back to Home</h5> </Link>
             <div className="card shadow p-5 bg-success">
@@ -106,7 +108,6 @@ function Auth({register}) {
                 </div>
             </div>
         </div>
-        <ToastContainer position="top-right" autoClose={2000} theme='colored'/>
     </div>
   )
 }
