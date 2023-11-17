@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AddProject from './AddProject';
 import { userProjectAPI } from '../services/allApis';
+import { addProjectResponseContext } from '../Context/ContextShare';
+import EditProject from './EditProject';
 
 function MyProjects() {
+  const {addProjectResponse,setAddProjectResponse} = useContext(addProjectResponseContext)
   const [projects,setProjects] = useState([])
   const [token,setToken] = useState("")
   useEffect(()=>{
@@ -15,7 +18,7 @@ function MyProjects() {
     if(token){
       getUserProjects()
     }
-  },[token])
+  },[token,addProjectResponse])
 
   const getUserProjects = async ()=>{
     const reqHeader = {
@@ -43,7 +46,7 @@ function MyProjects() {
           <div className="border d-flex align-items-center rounded text-primary p-2 mb-3">
           <h4>{project.title}</h4>
           <div className="icons ms-auto">
-            <button className='btn'> <i class="fa-solid fa-pen-to-square fa-2x "></i> </button>
+            <EditProject displayData={project} />
             <a className='btn' href={`${project.github}`} target='_blank'> <i class="fa-brands fa-github fa-2x "></i> </a>
             <button className='btn'> <i class="fa-solid fa-trash fa-2x"></i> </button>
           </div>

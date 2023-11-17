@@ -48,6 +48,9 @@
                     - Child can access shared data from its Function argument via props
                 - data sharing between siblings
                     - State Lifting : create state in parent and share it with its children
+                - data sharing between unrelated Components
+                    - REDUX
+                    - Context API
             - Style React Components - Using CSS
                 - Inline Styling
                 - External Style sheet
@@ -150,3 +153,13 @@
                     - createReducer() : to define Reducers
                     - createAction() : to define action
                     - createSlice() : to combine Reducers and action for updating a Single state
+                        - reducers
+                        - extraReducers
+                    - createAsyncThunk(): to make api call in redux
+            - Context API : used to pass global variables anywhere in the code
+                - solves the problem of prop drilling in React
+                - createContext() : Hook used to create context
+                    - Provider : passes the state to its children
+                    - Consumer : uses the state that has been passed
+                - useContext() : hook used to get the context in children
+                    

@@ -1,10 +1,32 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../Components/Header'
 import { Row,Col } from 'react-bootstrap'
 import ProjectCard from '../Components/ProjectCard'
+import { allProjectsAPI } from '../services/allApis'
 
 function Projects() {
-
+  const [allProjects,setAllProjects]=useState([])
+  const getAllprojects = async (token)=>{
+    const reqHeader = {
+      "Content-Type":"application/json", "Authorization":`Bearer ${token}`
+    }
+    const result = await allProjectsAPI(reqHeader)
+    console.log(result);
+    if(result.status===200){
+      setAllProjects(result.data)
+    }else{
+      alert(result.response.data)
+    }
+  }
+  useEffect(()=>{
+    if(sessionStorage.getItem("token")){
+      const token = sessionStorage.getItem("token")
+      console.log(token);
+      getAllprojects(token)
+    }else{
+      alert("Please Login!!!")
+    }
+  },[])
   return (
     <>
       {/* navbar */}
@@ -21,9 +43,12 @@ function Projects() {
         </div>
         <div className="container-fluid">
           <Row>
+             { allProjects?.length>0?allProjects?.map(project=>(
               <Col sm={12} md={6} lg={4} >
-                  <ProjectCard/>
+                  <ProjectCard project={project}/>
               </Col>
+             )): null
+             }
           </Row>
         </div>
       </div>
