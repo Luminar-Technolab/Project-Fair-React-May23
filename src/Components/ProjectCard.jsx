@@ -8,6 +8,7 @@ function ProjectCard({project}) {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    console.log(project);
   return (
     <>
        { project&&
@@ -25,7 +26,7 @@ function ProjectCard({project}) {
         <Modal.Body>
             <Row>
                 <Col>
-                    <img style={{height:'200px'}} className='img-fluid' src={ProjectImg} alt="single project" />
+                    <img style={{height:'200px'}} className='img-fluid' src={project?.projectImage?`${BASEURL}/uploads/${project.projectImage}`:ProjectImg} alt="single project" />
                 </Col>
                 <Col>
                     <h2>{project.title}</h2>
