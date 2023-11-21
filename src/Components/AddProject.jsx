@@ -24,8 +24,8 @@ function AddProject() {
       setPreview(URL.createObjectURL(projectDetails.image))
     }
   },[projectDetails.image])
-// console.log(projectDetails);
-// console.log(projectDetails.userId);
+console.log(projectDetails);
+console.log(projectDetails.userId);
   const handleClose = () => {
     setShow(false)
     setPreview("")

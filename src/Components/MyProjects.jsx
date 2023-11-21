@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import AddProject from './AddProject';
-import { userProjectAPI } from '../services/allApis';
-import { addProjectResponseContext } from '../Context/ContextShare';
+import { deleteProjectAPI, userProjectAPI } from '../services/allApis';
+import { addProjectResponseContext, editProjectResponseContext } from '../Context/ContextShare';
 import EditProject from './EditProject';
 
 function MyProjects() {
+  const {editProjectResponse,setEditProjectResponse} = useContext(editProjectResponseContext)
   const {addProjectResponse,setAddProjectResponse} = useContext(addProjectResponseContext)
   const [projects,setProjects] = useState([])
   const [token,setToken] = useState("")
@@ -18,7 +19,7 @@ function MyProjects() {
     if(token){
       getUserProjects()
     }
-  },[token,addProjectResponse])
+  },[token,addProjectResponse,editProjectResponse])
 
   const getUserProjects = async ()=>{
     const reqHeader = {
@@ -31,7 +32,20 @@ function MyProjects() {
       alert(result.response.data)
     }
   }
- 
+  
+  const handleDelete = async (e,id)=>{
+    e.preventDefault()
+    const reqHeader = {
+      "Content-Type":"application/json","Authorization":`Bearer ${token}`
+    }
+    const result = await deleteProjectAPI(id,reqHeader)
+    if(result.status===200){
+      getUserProjects()
+    }else{
+      console.log(result);
+      alert(result.response.data)
+    }
+  }
   
   return (
     <div className='card shadow p-3 mt-5'>
@@ -48,7 +62,7 @@ function MyProjects() {
           <div className="icons ms-auto">
             <EditProject displayData={project} />
             <a className='btn' href={`${project.github}`} target='_blank'> <i class="fa-brands fa-github fa-2x "></i> </a>
-            <button className='btn'> <i class="fa-solid fa-trash fa-2x"></i> </button>
+            <button onClick={(e)=>handleDelete(e,project._id)} className='btn'> <i class="fa-solid fa-trash fa-2x"></i> </button>
           </div>
         </div>
         )):

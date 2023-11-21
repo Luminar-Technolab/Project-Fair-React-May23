@@ -1,11 +1,14 @@
-import React,{useEffect, useState} from 'react'
+import React,{useContext, useEffect, useState} from 'react'
 import { Modal,Button } from 'react-bootstrap';
 import { BASEURL } from '../services/baseUrl';
+import { editProjectAPI } from '../services/allApis';
+import { editProjectResponseContext } from '../Context/ContextShare';
 
 function EditProject({displayData}) {
     // console.log(displayData);
+    const {editProjectResponse,setEditProjectResponse} = useContext(editProjectResponseContext)
     const [project,setProject] = useState({
-      title:"",languages:"",github:"",website:"",overview:"",projectImage:""
+      id:displayData._id,title:displayData.title,languages:displayData.languages,github:displayData.github,website:displayData.website,overview:displayData.overview,projectImage:""
     })
     const [preview,setPreview] = useState("")
     const [show, setShow] = useState(false);
@@ -24,13 +27,13 @@ function EditProject({displayData}) {
       setShow(false)
       setPreview("")
       setProject({
-        title:"",languages:"",github:"",website:"",overview:"",projectImage:""
+        id:displayData._id,title:displayData.title,languages:displayData.languages,github:displayData.github,website:displayData.website,overview:displayData.overview,projectImage:""
       })
     }
 
-    const handleUpdate = (e)=>{
+    const handleUpdate = async (e)=>{
       e.preventDefault()
-      const {title,languages,github,website,overview,projectImage} = project
+      const {id,title,languages,github,website,overview,projectImage} = project
       if(!title || !languages || !github || !website || !overview ){
         alert("Please fill the form completely!!!")
       }else{
@@ -46,9 +49,29 @@ function EditProject({displayData}) {
           const reqHeader = {
             "Content-Type":"multipart/form-data", "Authorization":`Bearer ${token}`
           }
+          const result = await editProjectAPI(id,reqBody,reqHeader)
+          if(result.status===200){
+            //madal closed, reset state
+            handleClose()
+            //share response with my project
+            setEditProjectResponse(result.data)
+          }else{
+            console.log(result);
+            alert(result.response.data)
+          }
         }else{
           const reqHeader = {
             "Content-Type":"application/json", "Authorization":`Bearer ${token}`
+          }
+          const result = await editProjectAPI(id,reqBody,reqHeader)
+          if(result.status===200){
+            //madal closed, reset state
+            handleClose()
+            //share response with my project
+            setEditProjectResponse(result.data)
+          }else{
+            console.log(result);
+            alert(result.response.data)
           }
         }
       }
