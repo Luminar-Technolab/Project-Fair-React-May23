@@ -27,7 +27,7 @@ function Projects() {
     }else{
       alert("Please Login!!!")
     }
-  },[])
+  },[searchKey])
   return (
     <>
       {/* navbar */}

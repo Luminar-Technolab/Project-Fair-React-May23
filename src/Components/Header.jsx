@@ -1,8 +1,15 @@
 import React from 'react'
 import { Navbar,Container } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 function Header({insideDashboard}) {
+  const navigate = useNavigate()
+  const handleLogout = ()=>{
+    sessionStorage.removeItem("token")
+    localStorage.removeItem("existingUser")
+    localStorage.removeItem("Role")
+    navigate('/')
+  }
   return (
     <Navbar style={{backgroundColor:'#90ee90',zIndex:'1'}} className="w-100 position-fixed top-0 ">
         <Container>
@@ -11,7 +18,7 @@ function Header({insideDashboard}) {
           </Navbar.Brand>
           {
             insideDashboard && 
-            <div style={{textDecoration:'none'}} className='btn btn-link  ms-auto text-primary fw-bolder fs-5 d-flex align-items-center'>Logout <i class="fa-solid fa-right-from-bracket fa-beat ms-2"></i></div>
+            <div onClick={handleLogout} style={{textDecoration:'none'}} className='btn btn-link  ms-auto text-primary fw-bolder fs-5 d-flex align-items-center'>Logout <i class="fa-solid fa-right-from-bracket fa-beat ms-2"></i></div>
           }
         </Container>
       </Navbar>
