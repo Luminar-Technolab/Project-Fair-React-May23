@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Navbar,Container } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
+import { tokenAuthContext } from '../Context/TokenAuth'
 
 function Header({insideDashboard}) {
+  const {isAuthenticate,setIsAuthenticate} = useContext(tokenAuthContext)
   const navigate = useNavigate()
   const handleLogout = ()=>{
     sessionStorage.removeItem("token")
     localStorage.removeItem("existingUser")
     localStorage.removeItem("Role")
+    setIsAuthenticate(false)
     navigate('/')
   }
   return (

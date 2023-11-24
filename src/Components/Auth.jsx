@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { loginAPI, registerAPI } from '../services/allApis'
+import { tokenAuthContext } from '../Context/TokenAuth'
 // import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 
 function Auth({register}) {
+    const {isAuthenticate,setIsAuthenticate} = useContext(tokenAuthContext)
     const registerForm = register ? true:false
     const [userData,setUserData] = useState({
         username:"",email:"",password:""
@@ -52,6 +54,7 @@ function Auth({register}) {
                 setUserData({
                     email:"",password:""
                 })
+                setIsAuthenticate(true)
                 navigate('/')
             }else{
                 alert(res.response.data)
