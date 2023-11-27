@@ -4,22 +4,24 @@ import { BASEURL } from '../services/baseUrl'
 
 function Profile() {
     const [useProfile,setUserProfile] = useState({
-        _id:JSON.parse(localStorage.getItem("existingUser"))._id,username:JSON.parse(localStorage.getItem("existingUser")).username,email:JSON.parse(localStorage.getItem("existingUser")).email,password:JSON.parse(localStorage.getItem("existingUser")).password,github:"",linkedin:"",profileImage:""
+        _id:JSON.parse(localStorage.getItem("existingUser"))._id,username:JSON.parse(localStorage.getItem("existingUser")).username,email:JSON.parse(localStorage.getItem("existingUser")).email,password:JSON.parse(localStorage.getItem("existingUser")).password,github:JSON.parse(localStorage.getItem("existingUser")).github,linkedin:JSON.parse(localStorage.getItem("existingUser")).linkedin,image:""
     })
-    const [existingImage,setExisitingImage]=useState("")
+    const [existingImage,setExisitingImage]=useState(JSON.parse(localStorage.getItem("existingUser")).image)
     const [preview,setPreview] = useState("")
+    console.log(existingImage);
     useEffect(()=>{
-        if(useProfile.profileImage){
-            setPreview(URL.createObjectURL(useProfile.profileImage))
+        if(useProfile.image){
+            setExisitingImage("")
+            setPreview(URL.createObjectURL(useProfile.image))
         }else{
             setPreview("")
         }
-    },[useProfile.profileImage])
+    },[useProfile.image])
     // console.log(useProfile);
 
     const handleUpdate = async (e)=>{
         e.preventDefault()
-        const {_id,username,email,password,github,linkedin,profileImage} = useProfile
+        const {_id,username,email,password,github,linkedin,image} = useProfile
         if(!_id || !username || !email || !password || !github || !linkedin ){
             alert("Please fill the form completely")
         }else{
@@ -29,7 +31,7 @@ function Profile() {
             reqBody.append("password",password)
             reqBody.append("github",github)
             reqBody.append("linkedin",linkedin)
-            reqBody.append("profileImage",profileImage)
+            reqBody.append("profileImage",image)
             const token = sessionStorage.getItem("token")
             if(preview){
                 const reqHeader = {
@@ -40,7 +42,7 @@ function Profile() {
                 if(result.status===200){
                     alert("profile updated")
                     setUserProfile({
-                        _id:result.data._id,username:result.data.username,email:result.data.email,password:result.data.password,github:result.data.github,linkedin:result.data.linkedin,profileImage:""
+                        _id:result.data._id,username:result.data.username,email:result.data.email,password:result.data.password,github:result.data.github,linkedin:result.data.linkedin,image:""
                     })
                     setExisitingImage(result.data.image)
                 }else{
@@ -56,7 +58,7 @@ function Profile() {
                 if(result.status===200){
                     alert("profile updated")
                     setUserProfile({
-                        _id:result.data._id,username:result.data.username,email:result.data.email,password:result.data.password,github:result.data.github,linkedin:result.data.linkedin,profileImage:""
+                        _id:result.data._id,username:result.data.username,email:result.data.email,password:result.data.password,github:result.data.github,linkedin:result.data.linkedin,image:""
                     })
                     setExisitingImage(result.data.image)
                 }else{
@@ -76,8 +78,11 @@ function Profile() {
         <div className="row justify-content-center mt-3">
             {/* picture */}
             <label className='text-center' htmlFor="profile">
-                <input id='profile' type="file" style={{display:'none'}} onChange={e=>setUserProfile({...useProfile,profileImage:e.target.files[0]})}/>
-                <img width={'200px'} height={'200px'} className='rounded-circle' src={preview?preview:`${BASEURL}/uploads/${existingImage}`} alt="profile picture" />
+                <input id='profile' type="file" style={{display:'none'}} onChange={e=>setUserProfile({...useProfile,image:e.target.files[0]})}/>
+
+                {
+                    existingImage!==""?<img width={'200px'} height={'200px'} className='rounded-circle' src={existingImage?`${BASEURL}/uploads/${existingImage}`:"https://cdn3.iconfinder.com/data/icons/avatars-flat/33/man_5-1024.png"} alt="profile picture" />:<img width={'200px'} height={'200px'} className='rounded-circle' src={preview?preview:"https://cdn3.iconfinder.com/data/icons/avatars-flat/33/man_5-1024.png"} alt="profile picture" />
+                }
             </label>
             <div className="mb-3">
                 <input type="text" className='form-control' placeholder='Github' value={useProfile.github} onChange={e=>setUserProfile({...useProfile,github:e.target.value})}/>
